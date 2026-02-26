@@ -1,0 +1,25 @@
+# kfly.toml
+[settings]
+kernel_root = "/home/AuroBreeze/Code/C/linux"
+test_email = "AuroBreeze@outlook.com"
+
+[[workflow]]
+name = "Checkpatch"
+command = "scripts/checkpatch.pl"
+args = ["{patch}"]
+interactive = false # ask y/N
+fail_fast = true  # if occuer failed then stop
+
+[[workflow]]
+name = "Get Maintainers"
+command = "scripts/get_maintainer.pl"
+args = ["{patch}"]
+interactive = false
+fail_fast = true
+
+[[workflow]]
+name = "Send Email"
+command = "git send-email"
+args = ["--suppress-cc=all"]
+interactive = true
+fail_fast = false
