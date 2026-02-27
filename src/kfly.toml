@@ -19,7 +19,8 @@ fail_fast = true
 
 [[workflow]]
 name = "Send Email"
-command = "git send-email"
-args = ["--suppress-cc=all"]
+command = "git"
+# The -to and -cc parameters will be automatically added by the get_maintainer.pl script.
+args = ["send-email","{patch}"]
 interactive = true
 fail_fast = false
