@@ -58,13 +58,15 @@ pub fn run_workflow(config: Config, absolute_patch: &Path) {
             }
 
             _ => {
-                execute_generic_task(&task, kernel_root, &patch_str);
+                if !execute_generic_task(&task, kernel_root, &patch_str) {
+                    return;
+                }
             }
         }
     }
 }
 
-fn execute_generic_task(task: &Task, kernel_root: &Path, patch_path: &str) {
+fn execute_generic_task(task: &Task, kernel_root: &Path, patch_path: &str) -> bool{
     let processed_args: Vec<String> = task
         .args
         .iter()
@@ -88,6 +90,7 @@ fn execute_generic_task(task: &Task, kernel_root: &Path, patch_path: &str) {
                 "Task success!".green().bold(),
                 task.name.cyan()
             );
+            true
         }
 
         _ => {
@@ -97,6 +100,7 @@ fn execute_generic_task(task: &Task, kernel_root: &Path, patch_path: &str) {
                 "Task failed:".red().bold(),
                 task.name.cyan()
             );
+
             if task.fail_fast {
                 println!(
                     "{} {} {}",
@@ -104,6 +108,9 @@ fn execute_generic_task(task: &Task, kernel_root: &Path, patch_path: &str) {
                     "Task failed:".red().bold(),
                     task.name.cyan()
                 );
+                false
+            }else{
+                true
             }
         }
     }
@@ -143,6 +150,6 @@ fn handle_send_mail(task: &Task, kernel_root: &Path, context: &ExecutionContext)
     mails.add_email(&context.maintainers);
     let patch_buf = PathBuf::from(&context.patch_path);
     let kernel_path = kernel_root.to_path_buf();
-    mails.send_email(task, context, &patch_buf, &kernel_path, true, true);
+    mails.send_email(task, context, &patch_buf, &kernel_path, true, false);
 
 }

@@ -1,6 +1,6 @@
 use colored::*;
 use std::collections::HashSet;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::process::Command;
 
 use crate::maintainer::Maintainer;
@@ -31,7 +31,7 @@ impl Mails {
         }
     }
 
-    pub fn send_email(&self, task: &Task, context: &ExecutionContext ,patch: &PathBuf, kernel_root: &PathBuf, is_test: bool, dry_run: bool) {
+    pub fn send_email(&self, task: &Task, context: &ExecutionContext ,patch: &Path, kernel_root: &PathBuf, is_test: bool, dry_run: bool) {
         // let mut cmd = Command::new("git");
         // cmd.arg("-C").arg(kernel_root).arg("send-email");
         // cmd.arg("--suppress-cc=all");
@@ -86,7 +86,7 @@ impl Mails {
             }
         }
 
-        cmd.arg(patch);
+        // cmd.arg(patch);
         println!("  {:>10}  {}", "Patch:".bold().cyan(), patch.display());
 
         let preview = format!(
